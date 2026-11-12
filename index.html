@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMISHA | متجر الأناقة</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b0b0b;color:#f8f3e9;font-family:Arial,sans-serif}
+header{padding:25px 15px;text-align:center;border-bottom:1px solid #b99548}
+.logo{font-family:Georgia,serif;font-size:42px;letter-spacing:7px;color:#d7b66b}
+header p{color:#c6b58f;letter-spacing:2px;font-size:11px}
+nav{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;padding:17px 8px}
+nav a{color:#d8bd7a;text-decoration:none;font-size:13px}
+.hero{text-align:center;padding:65px 15px;background:linear-gradient(140deg,#222,#080808)}
+.hero h1{font-family:Georgia,serif;font-size:34px;color:#d9bb76}
+.hero p{color:#ddd;line-height:2}
+.gold{color:#d9bb76}
+.btn{background:#c6a35b;color:#111;border:0;padding:12px 24px;border-radius:3px;font-weight:bold;cursor:pointer}
+section{padding:30px 15px}
+.heading{text-align:center;color:#d9bb76;font-size:23px;margin-bottom:25px}
+.categories{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.category{border:1px solid #705c35;padding:23px 8px;text-align:center;color:#e4c77f;background:#151515;cursor:pointer}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.product{background:#171717;border:1px solid #3c3323;text-align:center;padding:10px}
+.photo{height:130px;background:linear-gradient(145deg,#302819,#111);display:flex;align-items:center;justify-content:center;color:#d9bb76;font-size:14px}
+.product h3{font-size:15px}
+.product p{color:#c7aa6c;font-size:13px}
+.product button{width:100%;margin-top:8px}
+.cart{background:#171717;border:1px solid #9b7b40;padding:18px}
+.cart p{line-height:2}
+input{width:100%;padding:12px;background:#222;border:1px solid #80683e;color:white;margin:7px 0}
+footer{text-align:center;padding:30px;color:#c6aa70;border-top:1px solid #574728;font-size:13px;line-height:2}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">AMISHA</div>
+<p>THE ART OF ELEGANCE</p>
+</header>
+
+<nav>
+<a href="#home">الرئيسية</a>
+<a href="#categories">الأقسام</a>
+<a href="#products">المنتجات</a>
+<a href="#cart">السلة</a>
+</nav>
+
+<div class="hero" id="home">
+<h1>اكتشف الأناقة مع <span class="gold">AMISHA</span></h1>
+<p>كل ما تحب في مكان واحد<br>اختيارات مميزة للرجال والنساء</p>
+<button class="btn" onclick="document.getElementById('products').scrollIntoView()">تسوق الآن</button>
+</div>
+
+<section id="categories">
+<h2 class="heading">اكتشف أقسامنا</h2>
+<div class="categories">
+<div class="category" onclick="show('عطور')">✦ العطور</div>
+<div class="category" onclick="show('إكسسوارات')">✧ الإكسسوارات</div>
+<div class="category" onclick="show('بوكسات')">♡ بوكسات الهدايا</div>
+<div class="category" onclick="show('مكياج')">✦ المكياج والعناية</div>
+<div class="category" onclick="show('ملابس')">✧ الملابس</div>
+<div class="category" onclick="show('الكل')">جميع المنتجات</div>
+</div>
+</section>
+
+<section id="products">
+<h2 class="heading">منتجات AMISHA</h2>
+<div class="products" id="productList"></div>
+</section>
+
+<section id="cart">
+<h2 class="heading">سلة المشتريات</h2>
+<div class="cart">
+<div id="cartItems">السلة فارغة حالياً</div>
+<p>المجموع: <strong class="gold" id="total">0 DH</strong></p>
+<input id="customer" placeholder="الاسم الكامل">
+<input id="phone" placeholder="رقم الهاتف">
+<input id="address" placeholder="عنوان التوصيل">
+<button class="btn" onclick="checkout()">تأكيد الطلب عبر واتساب</button>
+</div>
+</section>
+
+<footer>
+<div class="logo">AMISHA</div>
+الجمال والأناقة في كل اختيار<br>
+© 2026 AMISHA. جميع الحقوق محفوظة.
+</footer>
+
+<script>
+// أضيفي المنتجات ديالك هنا
+const products = [
+{name:"عطر رجالي",category:"عطور",price:0},
+{name:"عطر نسائي",category:"عطور",price:0},
+{name:"إكسسوار رجالي",category:"إكسسوارات",price:0},
+{name:"إكسسوار نسائي",category:"إكسسوارات",price:0},
+{name:"بوكس هدية",category:"بوكسات",price:0},
+{name:"منتج مكياج",category:"مكياج",price:0},
+{name:"منتج عناية",category:"مكياج",price:0},
+{name:"ملابس رجالية ونسائية",category:"ملابس",price:0}
+];
+
+let cart=[];
+
+function render(list=products){
+document.getElementById('productList').innerHTML=list.map((p,i)=>`
+<div class="product">
+<div class="photo">AMISHA</div>
+<h3>${p.name}</h3>
+<p>${p.price ? p.price+' DH' : 'الثمن عند الطلب'}</p>
+<button class="btn" onclick="add(${products.indexOf(p)})">أضف للسلة</button>
+</div>`).join('');
+}
+
+function show(cat){
+render(cat==='الكل'?products:products.filter(p=>p.category===cat));
+document.getElementById('products').scrollIntoView();
+}
+
+function add(i){
+cart.push(products[i]);
+updateCart();
+}
+
+function updateCart(){
+document.getElementById('cartItems').innerHTML=cart.length?
+cart.map((p,i)=>`<p>${p.name} — ${p.price} DH <button onclick="removeItem(${i})">حذف</button></p>`).join(''):
+'السلة فارغة حالياً';
+document.getElementById('total').textContent=cart.reduce((s,p)=>s+p.price,0)+' DH';
+}
+
+function removeItem(i){
+cart.splice(i,1);
+updateCart();
+}
+
+function checkout(){
+const name=document.getElementById('customer').value;
+const phone=document.getElementById('phone').value;
+const address=document.getElementById('address').value;
+
+// ضعي رقم واتساب المتجر هنا مع رمز المغرب 212
+const whatsapp="212XXXXXXXXX";
+
+if(!cart.length){alert('السلة فارغة');return;}
+if(!name||!phone||!address){alert('يرجى ملء معلومات التوصيل');return;}
+if(whatsapp.includes('X')){alert('خاصك تضيفي رقم واتساب المتجر فالكود أولا');return;}
+
+const items=cart.map(p=>p.name+' : '+p.price+' DH').join('\n');
+const total=cart.reduce((s,p)=>s+p.price,0);
+const msg=`طلب جديد من AMISHA\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}\nالمنتجات:\n${items}\nالمجموع: ${total} DH`;
+window.open('https://wa.me/'+whatsapp+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+render();
+</script>
+</body>
+</html>
